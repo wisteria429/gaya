@@ -1,22 +1,31 @@
 <?php
 require 'vendor/autoload.php';
+require 'controller/BaseController.php';
+require 'controller/BeaconIndexController.php';
+require 'controller/BeaconIdController.php';
 
 $app = new \Slim\Slim();
+//レスポンスはすべてJSONなのでここで指定
+$app->response->headers->set('Content-Type', 'application/json');
 
-$app->get('/beacon', function() {
-    echo 'beaconの登録処理';
+// 各ルーティング処理
+$app->map('/beacon', function() use ($app) {
+    $c = new BeaconIndexController($app);
+    $c->exec();
+})->via('GET', 'POST');
+
+$app->get('/beacon/:id', function($id) use ($app){
+    $c = new BeaconIdController($app,$id);
+    $c->exec();
 });
 
-$app->get('/beacon/:id', function($id) {
-    echo 'beacon:'. $id ;
-});
 
-$app->get('/beacon/:id/:tap', function($id, $tap) {
+$app->map('/beacon/:id/:tap', function($id, $tap) use($app) {
     echo 'beacon:'. $id . '<br> tap:' . $tap;
-});
+})->via('GET', 'POST');
 
 
-$app->get('/sound' ,function() {
+$app->map('/sound' ,function() use($app) {
     echo '音一覧';
 });
 
