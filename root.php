@@ -3,6 +3,7 @@ require 'vendor/autoload.php';
 require 'controller/BaseController.php';
 require 'controller/BeaconIndexController.php';
 require 'controller/BeaconIdController.php';
+require 'controller/BeaconTapController.php';
 
 $app = new \Slim\Slim();
 //レスポンスはすべてJSONなのでここで指定
@@ -21,7 +22,9 @@ $app->get('/beacon/:id', function($id) use ($app){
 
 
 $app->map('/beacon/:id/:tap', function($id, $tap) use($app) {
-    echo 'beacon:'. $id . '<br> tap:' . $tap;
+    $c = new BeaconTapController($app,$id, $tap);
+    $c->exec();
+
 })->via('GET', 'POST');
 
 
