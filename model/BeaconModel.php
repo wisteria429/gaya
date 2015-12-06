@@ -6,7 +6,7 @@ class BeaconModel extends BaseDbModel {
     }
 
     function getBeacons($ids = null) {
-        $sql = 'SELECT id, title, file_name FROM beacons';
+        $sql = 'SELECT id, one_sound, two_sound, long_sound FROM beacons';
 
         if (!is_null($ids) && is_array($ids)) {
             $sql .= " WHERE id IN(". implode(',' , $ids) . ")";

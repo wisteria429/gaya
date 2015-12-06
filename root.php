@@ -8,6 +8,7 @@ require_once 'controller/SoundIndexController.php';
 require_once 'model/BaseDbModel.php';
 require_once 'model/SoundModel.php';
 require_once 'model/BeaconModel.php';
+require_once 'util/BeaconUtil.php';
 require_once 'util/SoundUtil.php';
 
 
