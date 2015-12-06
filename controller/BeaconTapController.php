@@ -16,6 +16,41 @@ class BeaconTapController extends BaseController {
     }
 
     function get() {
+        if ($this->tap != self::ONE_TAP 
+            && $this->tap != self::TWO_TAP 
+            && $this->tap != self::LONG_TAP ) {
+            //タップの種類が想定以外のものの場合は400を返す
+            $this->app->response->setStatus(400);
+            return;
+        }
+
+        $beaconM = new BeaconModel();
+        $soundM = new SoundModel();
+
+        //beaconの一覧を取得
+        $beacons = $beaconM->getBeacons(array($this->id));
+        
+
+        $beacon = $beacons[0];
+
+        $sound_id;
+        if ($this->tap === self::ONE_TAP) {
+            $sound_id = $beacon['one_sound'];
+        } else if ($this->tap === self::TWO_TAP) {
+            $sound_id = $beacon['two_sound'];
+        } else if ($this->tap === self::LONG_TAP) {
+            $sound_id = $beacon['long_sound'];
+        }
+
+        $sounds = $soundM->getSounds(array($sound_id));
+        $sound = $sounds[0];
+        $sound = SoundUtil::getSoundRow($sound['id'], $sound['title'], $sound['file_name']);
+
+        echo json_encode($sound);
+        
+
+
+/*
         $jsonOne = <<<JSON
 {
     "id":3,
@@ -49,13 +84,25 @@ JSON;
             $this->app->response->setStatus(400);
         }
 
+*/
     }
 
     function post() {
         $sound_id = $this->app->request->post('sound_id');
+        if ($this->tap != self::ONE_TAP 
+            && $this->tap != self::TWO_TAP 
+            && $this->tap != self::LONG_TAP) {
+            //タップの種類が想定以外のものの場合は400を返す
+            $this->app->response->setStatus(400);
+            return;
+        }
+
         if (empty($sound_id)) {
             $this->app->response->setStatus(400);
         } 
+
+        $model = new BeaconModel();
+        $model->updateBeacon($this->id, $this->tap . "_sound", $sound_id);
     }
 
 }

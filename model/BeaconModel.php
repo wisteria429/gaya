@@ -28,6 +28,14 @@ class BeaconModel extends BaseDbModel {
         $sth->execute();
     }
 
+    function updateBeacon($id, $tap_type, $sound_id) {
+        $sql = "UPDATE beacons SET $tap_type = :SOUND_ID WHERE id = :ID";
+        $sth = $this->dbh->prepare($sql);
+        $sth->bindParam(':ID',   $id,   PDO::PARAM_INT);
+        $sth->bindParam(':SOUND_ID',  $sound_id,  PDO::PARAM_INT);
+        $sth->execute();
+    }
+
 
     function __destruct() {
         parent::__destruct();
