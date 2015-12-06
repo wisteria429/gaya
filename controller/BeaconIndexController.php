@@ -8,6 +8,7 @@ class BeaconIndexController extends BaseController {
     }
 
     function get() {
+        
         $json = <<<JSON
 {
   "beacons":[
@@ -49,8 +50,14 @@ JSON;
 
     function post() {
         $id = $this->app->request->post('id');
+        
         if (empty($id)) {
+            //必須なパラメータがなければ400を返して抜ける
             $this->app->response->setStatus(400);
+            return ;
         }
+
+        $model = new BeaconModel();
+        $model->insertBeacon($id, 1, 2, 3);
     }
 }
