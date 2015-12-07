@@ -93,5 +93,6 @@ JSON;
 
         $model = new BeaconModel();
         $model->insertBeacon($id, 1, 2, 3);
+        echo '{"status": 0}';
     }
 }

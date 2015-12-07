@@ -103,6 +103,8 @@ JSON;
 
         $model = new BeaconModel();
         $model->updateBeacon($this->id, $this->tap . "_sound", $sound_id);
+
+        echo '{"status": 0}';
     }
 
 }
