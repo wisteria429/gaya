@@ -19,21 +19,45 @@ class BeaconModel extends BaseDbModel {
     }
 
     function insertBeacon($id, $one, $two, $long) {
-        $sql = "INSERT INTO beacons VALUES(:ID, :ONE, :TWO, :LONG);";
-        $sth = $this->dbh->prepare($sql);
-        $sth->bindParam(':ID',   $id,   PDO::PARAM_INT);
-        $sth->bindParam(':ONE',  $one,  PDO::PARAM_INT);
-        $sth->bindParam(':TWO',  $two,  PDO::PARAM_INT);
-        $sth->bindParam(':LONG', $long, PDO::PARAM_INT);
-        $sth->execute();
+        try {
+            $sql = "INSERT INTO beacons VALUES(:ID, :ONE, :TWO, :LONG);";
+            $sth = $this->dbh->prepare($sql);
+            $sth->bindParam(':ID',   $id,   PDO::PARAM_INT);
+            $sth->bindParam(':ONE',  $one,  PDO::PARAM_INT);
+            $sth->bindParam(':TWO',  $two,  PDO::PARAM_INT);
+            $sth->bindParam(':LONG', $long, PDO::PARAM_INT);
+            $sth->execute();
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
+    }
+    function deleteBeacon($id) {
+        try {
+            $sql = "DELETE FROM beacons WHERE id = :ID";
+            $sth = $this->dbh->prepare($sql);
+            $sth->bindParam(':ID',   $id,   PDO::PARAM_INT);
+            $sth->execute();
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
     }
 
+
     function updateBeacon($id, $tap_type, $sound_id) {
-        $sql = "UPDATE beacons SET $tap_type = :SOUND_ID WHERE id = :ID";
-        $sth = $this->dbh->prepare($sql);
-        $sth->bindParam(':ID',   $id,   PDO::PARAM_INT);
-        $sth->bindParam(':SOUND_ID',  $sound_id,  PDO::PARAM_INT);
-        $sth->execute();
+        
+        try {
+            $sql = "UPDATE beacons SET $tap_type = :SOUND_ID WHERE id = :ID";
+            $sth = $this->dbh->prepare($sql);
+            $sth->bindParam(':ID',   $id,   PDO::PARAM_INT);
+            $sth->bindParam(':SOUND_ID',  $sound_id,  PDO::PARAM_INT);
+            $sth->execute();
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
+            throw $e;
+           
+        }
     }
 
 

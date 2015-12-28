@@ -84,6 +84,7 @@ JSON;
 
     function post() {
         $id = $this->app->request->post('id');
+        $delete = $this->app->request->post('delete');
         
         if (empty($id)) {
             //必須なパラメータがなければ400を返して抜ける
@@ -91,8 +92,23 @@ JSON;
             return ;
         }
 
-        $model = new BeaconModel();
-        $model->insertBeacon($id, 1, 2, 3);
-        echo '{"status": 0}';
+
+        try {
+            $model = new BeaconModel();
+            if (empty($delete) || $delete === 1) {
+                $model->insertBeacon($id, 3, 6, 9);
+            } else {
+                $model->deleteBeacon($id);
+            }
+            echo '{"status": 0}';
+        } catch (PDOException $e) {
+            if ($e->errorInfo[1]  === 1062 ) {
+                $this->app->response->setStatus(403);
+            } else {
+                $this->app->response->setStatus(400);
+            }
+            echo json_encode($e);
+        }
     }
+
 }
